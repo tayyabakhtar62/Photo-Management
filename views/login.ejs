@@ -1,0 +1,81 @@
+<%- include ("partials/header") %>
+
+<div id="titlebar" class="gradient">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+                <h2>Log In</h2>
+
+                <nav id="breadcrumbs" class="dark">
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li>Log In</li>
+                    </ul>
+                </nav>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xl-5 offset-xl-3">
+
+            <div class="login-register-page">
+
+                <div class="welcome-text">
+                    <h3>We're glad to see you again!</h3>
+                    <span>Don't have an account? <a href="/register">Sign Up!</a></span>
+                </div>
+
+                <% if (typeof query.message !== "undefined") { %>
+                <div class="notification success closeable">
+                    <% if (query.message == "registered") { %>
+                    Account has been created. Please login now.
+                    <% } %>
+
+                    <% if (query.message == "password_reset") { %>
+                    Password has been changed. Please login now.
+                    <% } %>
+                </div>
+                <% } %>
+
+                <% if (typeof query.error !== "undefined") { %>
+                <div class="notification error closeable">
+                    <% if (query.error == "not_exists") { %>
+                    Email does not exists.
+                    <% } %>
+
+                    <% if (query.error == "wrong_password") { %>
+                    Password is incorrect.
+                    <% } %>
+
+                    <% if (query.error == "user_deleted") { %>
+                    User has been deleted.
+                    <% } %>
+                </div>
+                <% } %>
+
+                <form method="POST" action="/login">
+                    <div class="input-with-icon-left">
+                        <i class="icon-material-baseline-mail-outline"></i>
+                        <input type="text" class="input-text with-border" name="email" placeholder="Email Address" required autocomplete="off" />
+                    </div>
+
+                    <div class="input-with-icon-left">
+                        <i class="icon-material-outline-lock"></i>
+                        <input type="password" class="input-text with-border" name="password" placeholder="Password" required autocomplete="off" />
+                    </div>
+
+                    <button class="button full-width button-sliding-icon ripple-effect margin-top-10" type="submit">Log In <i class="icon-material-outline-arrow-right-alt"></i></button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<%- include ("partials/footer") %>

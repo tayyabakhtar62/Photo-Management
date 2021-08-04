@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<!-- Basic Page Needs
+================================================== -->
+<title>Photo Management</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<!-- CSS
+================================================== -->
+<link rel="stylesheet" href="/public/css/bootstrap.min.css">
+<link rel="stylesheet" href="/public/css/style.css?v=1">
+<link rel="stylesheet" href="/public/css/colors/blue.css">
+
+<!-- Scripts
+================================================== -->
+<script src="/public/js/jquery-3.3.1.min.js"></script>
+<script src="/public/js/jquery-migrate-3.0.0.min.js"></script>
+<script src="/public/js/mmenu.min.js"></script>
+<script src="/public/js/tippy.all.min.js"></script>
+<script src="/public/js/simplebar.min.js"></script>
+<script src="/public/js/bootstrap.min.js"></script>
+<script src="/public/js/bootstrap-slider.min.js"></script>
+<script src="/public/js/bootstrap-select.min.js"></script>
+<script src="/public/js/snackbar.js"></script>
+<script src="/public/js/clipboard.min.js"></script>
+<script src="/public/js/counterup.min.js"></script>
+<script src="/public/js/magnific-popup.min.js"></script>
+<script src="/public/js/slick.min.js"></script>
+<script src="/public/js/custom.js"></script>
+
+</head>
+<body>
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <%
+        months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        mainURL = "http://localhost:3000";
+    %>
+
+    <script>
+        var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    </script>
+
+<!-- Header Container
+================================================== -->
+<header id="header-container" class="fullwidth">
+
+    <!-- Header -->
+    <div id="header">
+        <div class="container">
+            
+            <!-- Left Side Content -->
+            <div class="left-side">
+                
+                <!-- Logo -->
+                <div id="logo">
+                    <a href="/"><img src="/public/images/newlogo.png" alt=""></a>
+                </div>
+                
+            </div>
+            <!-- Left Side Content / End -->
+
+
+            <!-- Right Side Content / End -->
+            <div class="right-side">
+                
+                <% if (typeof isLogin !== "undefined" && isLogin) { %>
+
+                <form method="GET" action="<%= mainURL %>/search" style="display: inline-block;     margin-right: 20px; margin-top: 16px;">
+                    <div class="form-group">
+                        <input type="text" name="query" placeholder="Search here..." class="form-control" required />
+                    </div>
+                </form>
+
+                <div class="header-widget">
+
+                    <div class="header-notifications user-menu">
+                        <div class="header-notifications-trigger">
+                            <a href="#">
+                                <div class="user-avatar status-online">
+                                    <img src="/public/images/1246351.svg" alt="User profile">
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="header-notifications-dropdown">
+
+                            <div class="user-status">
+
+                                <div class="user-details">
+                                    <div class="user-avatar status-online">
+                                        <img src="/public/images/1246351.svg" alt="">
+                                    </div>
+
+                                    <div class="user-name">
+                                        <%= user.name %>
+                                        <span><%= user.email %></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <ul class="user-menu-small-nav">
+                                <li>
+                                    <a href="/my_uploads">
+                                        <i class="icon-material-outline-backup"></i>
+                                        My Uploads
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="/logout">
+                                        <i class="icon-material-outline-power-settings-new"></i>
+                                        Logout
+                                    </a>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <% } else { %>
+
+                <form method="GET" action="<%= mainURL %>/search" style="display: inline-block; position: relative; bottom: 10px;">
+                    <div class="form-group">
+                        <input type="search" name="query" placeholder="Search here..." class="form-control" required />
+                    </div>
+                </form>
+
+                <nav id="navigation">
+                    <ul id="responsive">
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/register">Register</a></li>
+                    </ul>
+                </nav>
+
+                <% } %>
+
+            </div>
+            <!-- Right Side Content / End -->
+
+        </div>
+    </div>
+    <!-- Header / End -->
+
+</header>
+<div class="clearfix"></div>
+<!-- Header Container / End -->

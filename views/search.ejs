@@ -1,0 +1,145 @@
+<%- include ("partials/header") %>
+
+<div class="section white padding-top-0 margin-top-60 padding-bottom-60 full-width-carousel-fix">
+    <div class="container">
+
+        <h2 class="text-center" style="margin-bottom: 50px;"><%= search %></h2>
+
+        <script>
+            function doLike(self) {
+                var _id = self.getAttribute("data-id");
+
+                var isLiked = self.getAttribute("data-is-liked") == "true";
+                if (!isLiked) {
+                    self.setAttribute("disabled", "disabled");
+                    self.style.backgroundColor = "darkgray";
+                    self.style.color = "white";
+                }
+
+                $.ajax({
+                    url: "/do-like",
+                    method: "POST",
+                    data: {
+                        "_id": _id
+                    },
+                    success: function (response) {
+                        console.log(response);
+
+                        if (response.status == "success") {
+                            self.style.backgroundColor = "royalblue";
+                            self.style.color = "white";
+
+                            var likes = parseInt(self.getAttribute("data-likes"));
+                            likes++;
+                            self.innerHTML = "Like (" + likes + ")";
+
+                            self.setAttribute("data-is-liked", "true");
+                        } else {
+                            alert(response.message);
+
+                            if (!isLiked) {
+                                self.style.backgroundColor = "#fff";
+                                self.style.color = "black";
+                            }
+                        }
+                    }
+                });
+
+                return false;
+            }
+        </script>
+
+        <div class="row">
+            <div class="col-xl-12">
+
+                <div class="blog-carousel1 row">
+
+                    <% images.forEach(function (image) { %>
+                    <div class="col-md-4">
+                        <a href="/view-image?_id=<%= image._id %>" class="blog-compact-item-container">
+                            <div class="blog-compact-item">
+                                <img src="<%= image.filePath %>" alt="User profile image">
+
+                                <% if (typeof isLogin !== "undefined" && isLogin) {
+                                    var hasLiked = false;
+                                    image.likers.forEach(function (liker) {
+                                        if (liker._id == user._id) {
+                                            hasLiked = true;
+                                        }
+                                    })
+
+                                    if (hasLiked) { %>
+                                    <span data-is-liked="true" onclick="doLike(this);" data-id="<%= image._id %>" class="blog-item-tag liked">Like (<%= image.likers.length %>)</span>
+                                    <% } else { %>
+                                    <span data-is-liked="false" onclick="doLike(this);" data-id="<%= image._id %>" data-likes="<%= image.likers.length %>" class="blog-item-tag">Like (<%= image.likers.length %>)</span>
+                                    <% }
+
+                                } else { %>
+                                <span data-is-liked="false" class="blog-item-tag" onclick="doLike(this);" data-id="<%= image._id %>">Likes (<%= image.likers.length %>)</span>
+                                <% } %>
+
+                                <div class="blog-compact-item-content">
+                                    <ul class="blog-post-tags">
+                                        <li><%
+                                        var createdAt = new Date(image.createdAt);
+                                        var date = createdAt.getDate() + "";
+                                        %>
+                                        <%= date.padStart(2, "0") + " " + months[createdAt.getMonth()] + ", " + createdAt.getFullYear() %></li>
+                                    </ul>
+                                    <h3><%= image.user.name %></h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <% }) %>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal" id="modal-image-upload">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Upload Image</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img id="preview">
+
+                <div class="form-group" style="margin-top: 20px;">
+                    <label>Enter caption</label>
+                    <input type="text" name="caption" class="form-control" form="form-upload-image" required />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="form-upload-image" class="button ripple-effect">Upload Image</button>
+                <button type="button" class="button gray ripple-effect-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showImageInModal(file) {
+        var file = document.getElementById("input-file-image").files;
+        if (file.length > 0) {
+            var fileReader = new FileReader();
+
+            fileReader.onload = function (event) {
+                document.getElementById("preview").setAttribute("src", event.target.result);
+                $("#modal-image-upload").modal("show");
+            };
+
+            fileReader.readAsDataURL(file[0]);
+        }
+    }
+</script>
+
+<%- include ("partials/footer") %>

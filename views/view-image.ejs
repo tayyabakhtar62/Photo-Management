@@ -1,0 +1,117 @@
+<%- include ("partials/header") %>
+
+<div class="container margin-top-60">
+    <div class="row">
+
+        <div class="col-xl-12 col-lg-12">
+            <div class="blog-post single-post">
+
+                <div class="blog-post-thumbnail">
+                    <div class="blog-post-thumbnail-inner">
+                        <img src="<%= image.filePath %>" />
+                    </div>
+                </div>
+
+                <div class="blog-post-content">
+
+                    <h2><%= image.caption %></h2>
+
+                    <h3 class="margin-bottom-10" style="margin-top: 50px;">
+                        <span class="lead">Posted by: </span>
+                        <%= image.user.name %>
+                    </h3>
+
+                    <div class="blog-post-info-list margin-bottom-20">
+                        <a href="#" class="blog-post-info"><%
+                        var createdAt = new Date(image.createdAt);
+                        var date = createdAt.getDate() + "";
+                        %>
+                        <%= date.padStart(2, "0") + " " + months[createdAt.getMonth()] + ", " + createdAt.getFullYear() %></a>
+                        <a href="#" class="blog-post-info"><%= image.comments.length %> Comments</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-xl-12">
+            <section class="comments" id="comments">
+
+                <% if (typeof query.message !== "undefined") { %>
+                <div class="notification success closeable">
+                    <% if (query.message == "success") { %>
+                    Your comment has been posted.
+                    <% } %>
+                </div>
+                <% } %>
+
+                <% if (typeof query.error !== "undefined") { %>
+                <div class="notification error closeable">
+                    <% if (query.error == "not_login") { %>
+                    You have been logged out. Please login again.
+                    <% } %>
+                </div>
+                <% } %>
+
+                <h3 class="margin-top-45 margin-bottom-0">Comments <span class="comments-amount">(<%= image.comments.length %>)</span></h3>
+
+                <ul>
+                    <%
+                    image.comments = image.comments.reverse();
+                    image.comments.forEach(function (comment) { %>
+                    <li>
+                        <div class="avatar"><img src="/public/images/1246351.svg" /></div>
+                        <div class="comment-content">
+                            <div class="arrow-comment"></div>
+                            <div class="comment-by"><%= comment.user.name %><span class="date"><%
+                            var createdAt = new Date(comment.createdAt);
+                            var date = createdAt.getDate() + "";
+                            %>
+                            <%= date.padStart(2, "0") + " " + months[createdAt.getMonth()] + ", " + createdAt.getFullYear() %></span>
+                            </div>
+                            <p><%= comment.comment %></p>
+                        </div>
+
+                    </li>
+                    <% }) %>
+                </ul>
+
+            </section>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-12">
+
+            <h3 class="margin-top-35 margin-bottom-30">Add Comment</h3>
+
+            <% if (typeof isLogin !== "undefined" && isLogin) { %>
+            <form method="POST" action="/do-comment">
+                <input type="hidden" name="_id" value="<%= image._id %>">
+                <textarea name="comment" cols="30" rows="5" placeholder="Comment"></textarea>
+
+                <button class="button button-sliding-icon ripple-effect margin-bottom-40" type="submit">Add Comment <i class="icon-material-outline-arrow-right-alt"></i></button>
+            </form>
+            <% } else { %>
+            <div class="notification error closeable">
+                Only registered users can comment.
+            </div>
+            <% } %>
+
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .liked {
+        background-color: royalblue !important;
+        color: white !important;
+    }
+</style>
+
+<%- include ("partials/footer") %>
